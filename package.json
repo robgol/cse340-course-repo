@@ -1,0 +1,28 @@
+{
+  "name": "cse340-hw",
+  "version": "1.0.0",
+  "description": "This repository contains the coursework and projects completed by **Robson Correia** for the **CSE 340: Web Backend Development** course at **Brigham Young University - Idaho (BYU-I)**.",
+  "homepage": "https://github.com/robgol/cse340-course-repo#readme",
+  "bugs": {
+    "url": "https://github.com/robgol/cse340-course-repo/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/robgol/cse340-course-repo.git"
+  },
+  "license": "ISC",
+  "author": "Robson Correia",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "dev": "nodemon",
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "ejs": "^6.0.1",
+    "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}
