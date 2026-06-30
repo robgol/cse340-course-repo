@@ -1,13 +1,88 @@
 <%- include('partials/header') %>
 
-<main>
-    <h1><%= title %></h1>
-    <h2>Upcoming Service Projects</h2>
-    <ul>
-        <li>Park Cleanup - Join us to clean up local parks and make them beautiful!</li>
-        <li>Food Drive - Help collect and distribute food to those in need.</li>
-        <li>Community Tutoring - Volunteer to tutor students in various subjects.</li>
-    </ul>
-</main>
+<section class="py-12">
+    <div class="max-container">
+        <!-- Header & Filter Bar -->
+        <div class="flex flex-col md:flex-row justify-between items-end gap-6 mb-12">
+            <div>
+                <h1 class="text-4xl font-bold mb-2"><%= title %></h1>
+                <p class="text-slate-600">Discover opportunities to contribute your skills.</p>
+            </div>
+            <button class="flex items-center gap-2 px-6 py-3 bg-white border border-outline rounded-xl font-bold hover:bg-surface transition-colors">
+                <i data-lucide="filter" class="w-5 h-5"></i>
+                Filter Results
+            </button>
+        </div>
+
+        <!-- Project Listings -->
+        <div class="space-y-8">
+            <% 
+            const projectList = [
+                { 
+                    title: 'Community Garden Revitalization', 
+                    date: 'July 15, 2026', 
+                    img: 'https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                    desc: 'Help us transform a neglected urban lot into a thriving community garden. No gardening experience required, just a willingness to get your hands dirty!',
+                    org: 'Green Harvest Growers'
+                },
+                { 
+                    title: 'Non-Profit Website Redesign', 
+                    date: 'August 02, 2026', 
+                    img: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                    desc: 'We are looking for UI/UX designers and frontend developers to help a local food bank modernize their online presence and donation portal.',
+                    org: 'BrightFuture Builders'
+                },
+                { 
+                    title: 'Youth Mentorship Program', 
+                    date: 'Ongoing', 
+                    img: 'https://images.unsplash.com/photo-1529070538774-1843cb3265df?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                    desc: 'Mentor high school students interested in STEM careers. Requires a commitment of 2 hours per week for at least one semester.',
+                    org: 'UnityServe Volunteers'
+                }
+            ];
+            %>
+
+            <% projectList.forEach(project => { %>
+            <div class="bg-surface-container border border-outline rounded-[24px] overflow-hidden flex flex-col md:flex-row transition-all card-hover group">
+                <div class="md:w-1/3 lg:w-1/4 h-64 md:h-auto overflow-hidden">
+                    <img src="<%= project.img %>" alt="<%= project.title %>" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                </div>
+                <div class="p-8 md:w-2/3 lg:w-3/4 flex flex-col">
+                    <div class="flex items-center gap-3 text-sm font-bold text-secondary mb-3">
+                        <i data-lucide="calendar" class="w-4 h-4"></i>
+                        <%= project.date %>
+                        <span class="text-outline">•</span>
+                        <span class="text-slate-400 font-medium"><%= project.org %></span>
+                    </div>
+                    <h2 class="text-2xl font-bold mb-4 group-hover:text-secondary transition-colors"><%= project.title %></h2>
+                    <p class="text-slate-600 mb-8 flex-grow leading-relaxed">
+                        <%= project.desc %>
+                    </p>
+                    <div class="flex justify-between items-center mt-auto">
+                        <button class="px-6 py-3 bg-primary text-white font-bold rounded-xl hover:bg-secondary transition-all">
+                            Learn More
+                        </button>
+                        <button class="p-3 text-slate-400 hover:text-red-500 transition-colors">
+                            <i data-lucide="heart" class="w-6 h-6"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <% }); %>
+        </div>
+
+        <!-- Propose a Project CTA -->
+        <div class="mt-20 bg-primary rounded-[32px] p-10 md:p-16 text-center text-white relative overflow-hidden">
+            <div class="absolute top-0 left-0 w-64 h-64 bg-secondary/20 rounded-full -ml-32 -mt-32 blur-3xl"></div>
+            <div class="relative z-10">
+                <h2 class="text-3xl font-bold mb-6">Have a project idea?</h2>
+                <p class="text-slate-400 max-w-xl mx-auto mb-10">If you know of a service opportunity that isn't listed here, we'd love to hear about it. Help us expand our reach!</p>
+                <button class="px-10 py-4 bg-secondary text-white font-bold rounded-full hover:bg-white hover:text-secondary transition-all card-hover flex items-center gap-2 mx-auto">
+                    Propose a Project <i data-lucide="plus" class="w-5 h-5"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
 
 <%- include('partials/footer') %>

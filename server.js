@@ -3,10 +3,10 @@ import { fileURLToPath } from 'url';
 import path from 'path';
 
 // Defines the application environment
-const NODE_ENV = process.env.NODE_ENV?.toLowerCase() || 'production';
+const nodeEnv = process.env.NODE_ENV?.toLowerCase() || 'production';
 
 // Defines the port number the server will listen on
-const PORT = process.env.PORT || 3000;
+const port = process.env.PORT || 3000;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -42,6 +42,7 @@ app.get('/organizations', async (req, res) => {
 });
 
 app.get('/projects', async (req, res) => {
+    // Renders the projects view
     const title = 'Service Projects';
     res.render('projects', { title });
 });
@@ -52,7 +53,7 @@ app.get('/categories', async (req, res) => {
     res.render('categories', { title });
 });
 
-app.listen(PORT, () => {
-  console.log(`Server is running at http://127.0.0.1:${PORT}`);
-  console.log(`Environment: ${NODE_ENV}`);
+app.listen(port, () => {
+  console.log(`Server is running at http://127.0.0.1:${port}`);
+  console.log(`Environment: ${nodeEnv}`);
 });

@@ -4,15 +4,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= title %></title>
+    <title><%= title %> | CSE 340 Service Network</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#0f172a',
+                        secondary: '#0d9488',
+                        accent: '#38bdf8',
+                        surface: '#f8f9ff',
+                        'surface-container': '#ffffff',
+                        outline: '#e2e8f0',
+                    },
+                    fontFamily: {
+                        sans: ['Manrope', 'sans-serif'],
+                    },
+                    borderRadius: {
+                        'card': '12px',
+                    }
+                }
+            }
+        }
+    </script>
     <link rel="stylesheet" href="/css/main.css">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
 </head>
-<body>
-    <nav>
-        <ul>
-            <li><a href="/">Home</a></li>
-            <li><a href="/organizations">Organizations</a></li>
-            <li><a href="/projects">Projects</a></li>
-            <li><a href="/categories">Categories</a></li>
-        </ul>
-    </nav>
+<body class="bg-surface text-primary min-h-screen flex flex-col">
+    <header class="bg-surface-container border-b border-outline sticky top-0 z-50">
+        <div class="max-container flex justify-between items-center h-20">
+            <a href="/" class="flex items-center gap-2 text-2xl font-extrabold text-primary">
+                <div class="w-10 h-10 bg-secondary rounded-lg flex items-center justify-center text-white">
+                    <i data-lucide="heart-handshake"></i>
+                </div>
+                <span class="hidden sm:inline">CSE 340</span>
+            </a>
+            <nav>
+                <ul class="flex gap-8 font-semibold">
+                    <li><a href="/" class="hover:text-secondary transition-colors <%= title === 'Home' ? 'text-secondary' : '' %>">Home</a></li>
+                    <li><a href="/organizations" class="hover:text-secondary transition-colors <%= title === 'Our Partner Organizations' ? 'text-secondary' : '' %>">Organizations</a></li>
+                    <li><a href="/projects" class="hover:text-secondary transition-colors <%= title === 'Service Projects' ? 'text-secondary' : '' %>">Projects</a></li>
+                    <li><a href="/categories" class="hover:text-secondary transition-colors <%= title === 'Service Project Categories' ? 'text-secondary' : '' %>">Categories</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <main class="flex-grow">

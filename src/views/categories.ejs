@@ -1,17 +1,98 @@
 <%- include('partials/header') %>
 
-<main>
-    <h1><%= title %></h1>
+<section class="py-16">
+    <div class="max-container">
+        <header class="mb-16">
+            <h1 class="text-4xl font-bold mb-4"><%= title %></h1>
+            <p class="text-slate-600">Find the right cause for your passions and skills.</p>
+        </header>
 
-    <div class="categories-list">
-        <h2>Service Project Categories</h2>
-        <ul>
-            <li>Environmental</li>
-            <li>Educational</li>
-            <li>Community Service</li>
-            <li>Health and Wellness</li>
-        </ul>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <% 
+            const categories = [
+                { 
+                    name: 'Environmental', 
+                    count: 24, 
+                    icon: 'leaf', 
+                    color: 'from-emerald-400 to-emerald-600',
+                    img: 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
+                },
+                { 
+                    name: 'Educational', 
+                    count: 18, 
+                    icon: 'book-open', 
+                    color: 'from-blue-400 to-blue-600',
+                    img: 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
+                },
+                { 
+                    name: 'Healthcare', 
+                    count: 12, 
+                    icon: 'activity', 
+                    color: 'from-rose-400 to-rose-600',
+                    img: 'https://images.unsplash.com/photo-1505751172177-51bd1673a11a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
+                },
+                { 
+                    name: 'Community', 
+                    count: 31, 
+                    icon: 'users', 
+                    color: 'from-amber-400 to-amber-600',
+                    img: 'https://images.unsplash.com/photo-1517048676732-d65bc937f952?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
+                },
+                { 
+                    name: 'Technology', 
+                    count: 9, 
+                    icon: 'cpu', 
+                    color: 'from-indigo-400 to-indigo-600',
+                    img: 'https://images.unsplash.com/photo-1518770660439-4636190af475?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
+                },
+                { 
+                    name: 'Animal Welfare', 
+                    count: 15, 
+                    icon: 'dog', 
+                    color: 'from-orange-400 to-orange-600',
+                    img: 'https://images.unsplash.com/photo-1450778869180-41d0601e046e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
+                }
+            ];
+            %>
+
+            <% categories.forEach(cat => { %>
+            <div class="relative h-80 rounded-card overflow-hidden group cursor-pointer transition-all card-hover">
+                <img src="<%= cat.img %>" alt="<%= cat.name %>" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-125">
+                <div class="absolute inset-0 bg-gradient-to-t from-primary/90 via-primary/40 to-transparent"></div>
+                
+                <div class="absolute top-6 right-6 px-3 py-1 bg-secondary text-white text-xs font-bold rounded-full shadow-lg">
+                    <%= cat.count %> Active Projects
+                </div>
+
+                <div class="absolute inset-0 p-8 flex flex-col justify-end">
+                    <div class="w-12 h-12 bg-white/20 backdrop-blur-md rounded-xl flex items-center justify-center text-white mb-4 group-hover:bg-secondary transition-colors duration-300">
+                        <i data-lucide="<%= cat.icon %>" class="w-6 h-6"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold text-white mb-2"><%= cat.name %></h2>
+                    <a href="/projects?category=<%= cat.name.toLowerCase() %>" class="flex items-center gap-2 text-secondary font-bold text-sm group-hover:text-white transition-colors">
+                        Browse <%= cat.name %> <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </a>
+                </div>
+            </div>
+            <% }); %>
+        </div>
+
+        <!-- Contact Footer Card -->
+        <div class="mt-20 bg-surface-container border border-outline rounded-[32px] p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-8 transition-all card-hover">
+            <div class="text-center md:text-left">
+                <h2 class="text-2xl font-bold mb-2">Can't find what you're looking for?</h2>
+                <p class="text-slate-600">Our team is here to help you find the perfect match for your skills.</p>
+            </div>
+            <div class="flex flex-wrap justify-center gap-4">
+                <button class="px-8 py-4 bg-primary text-white font-bold rounded-xl hover:bg-secondary transition-all">
+                    Contact Us
+                </button>
+                <button class="px-8 py-4 border-2 border-primary text-primary font-bold rounded-xl hover:bg-primary hover:text-white transition-all">
+                    Suggest a Category
+                </button>
+            </div>
+        </div>
     </div>
-</main>
+</section>
 
 <%- include('partials/footer') %>
