@@ -42,9 +42,14 @@ app.get('/organizations', async (req, res) => {
 });
 
 app.get('/projects', async (req, res) => {
-    // Renders the projects view
     const title = 'Service Projects';
     res.render('projects', { title });
+});
+
+app.get('/categories', async (req, res) => {
+    // Renders the categories view
+    const title = 'Service Project Categories';
+    res.render('categories', { title });
 });
 
 app.listen(PORT, () => {
