@@ -11,22 +11,14 @@
             <!-- Grid of Organizations -->
             <div class="lg:col-span-3">
                 <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-                    <% 
-                    const orgs = [
-                        { name: 'BrightFuture Builders', logo: 'brightfuture-logo.png', desc: 'Working to build a better future through community infrastructure and housing projects.', email: 'info@brightfuture.org' },
-                        { name: 'GreenHarvest Growers', logo: 'greenharvest-logo.png', desc: 'Promoting sustainable agriculture and providing fresh produce to those in need.', email: 'contact@greenharvest.org' },
-                        { name: 'UnityServe Volunteers', logo: 'unityserve-logo.png', desc: 'Bringing people together to serve their local communities through diverse volunteer initiatives.', email: 'hello@unityserve.org' }
-                    ];
-                    %>
-
-                    <% orgs.forEach(org => { %>
+                    <% organizations.forEach(org => { %>
                     <div class="bg-surface-container border border-outline rounded-card p-6 flex flex-col items-center text-center transition-all card-hover">
                         <div class="w-20 h-20 bg-white rounded-full flex items-center justify-center mb-4 border border-outline overflow-hidden p-2">
-                            <img src="/images/<%= org.logo %>" alt="<%= org.name %> logo" class="w-full h-full object-contain">
+                            <img src="/images/<%= org.logo_filename %>" alt="<%= org.name %> logo" class="w-full h-full object-contain">
                         </div>
                         <h3 class="text-xl font-bold mb-3"><%= org.name %></h3>
-                        <p class="text-slate-600 text-sm mb-6 flex-grow"><%= org.desc %></p>
-                        <a href="mailto:<%= org.email %>" class="w-full py-3 px-4 bg-primary text-white text-sm font-bold rounded-lg hover:bg-secondary transition-colors">
+                        <p class="text-slate-600 text-sm mb-6 flex-grow"><%= org.description %></p>
+                        <a href="mailto:<%= org.contact_email %>" class="w-full py-3 px-4 bg-primary text-white text-sm font-bold rounded-lg hover:bg-secondary transition-colors">
                             Contact Organization
                         </a>
                     </div>

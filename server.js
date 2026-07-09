@@ -1,12 +1,14 @@
 import express from 'express';
 import { fileURLToPath } from 'url';
 import path from 'path';
+import { testConnection } from './src/models/db.js';
+import { getAllOrganizations } from './src/models/organizations.js';
 
 // Defines the application environment
-const nodeEnv = process.env.NODE_ENV?.toLowerCase() || 'production';
+const NODE_ENV = process.env.NODE_ENV?.toLowerCase() || 'production';
 
 // Defines the port number the server will listen on
-const port = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3000;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -30,30 +32,44 @@ app.set('views', path.join(__dirname, 'src/views'));
  * Defines the routes
  */
 app.get('/', async (req, res) => {
-    // Renders the home view
-    const title = 'Home';
-    res.render('home', { title });
+  // Renders the home view
+  const title = 'Home';
+  res.render('home', { title });
 });
 
 app.get('/organizations', async (req, res) => {
-    // Renders the organizations view
-    const title = 'Our Partner Organizations';
-    res.render('organizations', { title });
+  const organizations = await getAllOrganizations();
+  const title = 'Our Partner Organizations';
+
+  res.render('organizations', { title, organizations });
 });
 
 app.get('/projects', async (req, res) => {
-    // Renders the projects view
-    const title = 'Service Projects';
-    res.render('projects', { title });
+  // Renders the projects view
+  const title = 'Service Projects';
+  res.render('projects', { title });
 });
 
 app.get('/categories', async (req, res) => {
-    // Renders the categories view
-    const title = 'Service Project Categories';
-    res.render('categories', { title });
+  // Renders the categories view
+  const title = 'Service Project Categories';
+  res.render('categories', { title });
 });
 
-app.listen(port, () => {
-  console.log(`Server is running at http://127.0.0.1:${port}`);
-  console.log(`Environment: ${nodeEnv}`);
+app.listen(PORT, async () => {
+
+  try {
+
+    await testConnection();
+
+    console.log(`Server is running at http://127.0.0.1:${PORT}`);
+
+    console.log(`Environment: ${NODE_ENV}`);
+
+  } catch (error) {
+
+    console.error('Error connecting to the database:', error);
+
+  }
+
 });
