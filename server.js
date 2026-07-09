@@ -1,3 +1,4 @@
+import 'dotenv/config'; // <-- OBRIGATÓRIO SER A PRIMEIRA LINHA para injetar as variáveis antes dos modelos
 import express from 'express';
 import { fileURLToPath } from 'url';
 import path from 'path';
@@ -16,8 +17,8 @@ const __dirname = path.dirname(__filename);
 const app = express();
 
 /**
-  * Configures Express middleware
-  */
+ * Configures Express middleware
+ */
 
 // Serves static files from the public directory
 app.use(express.static(path.join(__dirname, 'public')));
@@ -40,7 +41,6 @@ app.get('/', async (req, res) => {
 app.get('/organizations', async (req, res) => {
   const organizations = await getAllOrganizations();
   const title = 'Our Partner Organizations';
-
   res.render('organizations', { title, organizations });
 });
 
@@ -57,19 +57,11 @@ app.get('/categories', async (req, res) => {
 });
 
 app.listen(PORT, async () => {
-
   try {
-
     await testConnection();
-
     console.log(`Server is running at http://127.0.0.1:${PORT}`);
-
     console.log(`Environment: ${NODE_ENV}`);
-
   } catch (error) {
-
     console.error('Error connecting to the database:', error);
-
   }
-
 });
