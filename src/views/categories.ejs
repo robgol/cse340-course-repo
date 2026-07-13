@@ -8,62 +8,11 @@
         </header>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <% 
-            const categories = [
-                { 
-                    name: 'Environmental', 
-                    count: 24, 
-                    icon: 'leaf', 
-                    color: 'from-emerald-400 to-emerald-600',
-                    img: 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
-                },
-                { 
-                    name: 'Educational', 
-                    count: 18, 
-                    icon: 'book-open', 
-                    color: 'from-blue-400 to-blue-600',
-                    img: 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
-                },
-                { 
-                    name: 'Healthcare', 
-                    count: 12, 
-                    icon: 'activity', 
-                    color: 'from-rose-400 to-rose-600',
-                    img: 'https://images.unsplash.com/photo-1505751172177-51bd1673a11a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
-                },
-                { 
-                    name: 'Community', 
-                    count: 31, 
-                    icon: 'users', 
-                    color: 'from-amber-400 to-amber-600',
-                    img: 'https://images.unsplash.com/photo-1517048676732-d65bc937f952?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
-                },
-                { 
-                    name: 'Technology', 
-                    count: 9, 
-                    icon: 'cpu', 
-                    color: 'from-indigo-400 to-indigo-600',
-                    img: 'https://images.unsplash.com/photo-1518770660439-4636190af475?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
-                },
-                { 
-                    name: 'Animal Welfare', 
-                    count: 15, 
-                    icon: 'dog', 
-                    color: 'from-orange-400 to-orange-600',
-                    img: 'https://images.unsplash.com/photo-1450778869180-41d0601e046e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
-                }
-            ];
-            %>
-
             <% categories.forEach(cat => { %>
             <div class="relative h-80 rounded-card overflow-hidden group cursor-pointer transition-all card-hover">
-                <img src="<%= cat.img %>" alt="<%= cat.name %>" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-125">
+                <img src="<%= cat.image_url %>" alt="<%= cat.name %>" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-125">
                 <div class="absolute inset-0 bg-gradient-to-t from-primary/90 via-primary/40 to-transparent"></div>
                 
-                <div class="absolute top-6 right-6 px-3 py-1 bg-secondary text-white text-xs font-bold rounded-full shadow-lg">
-                    <%= cat.count %> Active Projects
-                </div>
-
                 <div class="absolute inset-0 p-8 flex flex-col justify-end">
                     <div class="w-12 h-12 bg-white/20 backdrop-blur-md rounded-xl flex items-center justify-center text-white mb-4 group-hover:bg-secondary transition-colors duration-300">
                         <i data-lucide="<%= cat.icon %>" class="w-6 h-6"></i>
