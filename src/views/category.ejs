@@ -1,0 +1,94 @@
+<%- include('partials/header') %>
+
+<section class="py-16">
+    <div class="max-container">
+        <!-- Breadcrumb / Back Navigation -->
+        <nav class="mb-8">
+            <a href="/categories" class="inline-flex items-center gap-2 text-slate-500 hover:text-secondary font-bold transition-colors">
+                <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                Back to All Categories
+            </a>
+        </nav>
+
+        <% if (category) { %>
+            <header class="mb-16 relative rounded-[32px] overflow-hidden h-64 flex items-center">
+                <img src="<%= category.image_url %>" alt="<%= category.name %>" class="absolute inset-0 w-full h-full object-cover">
+                <div class="absolute inset-0 bg-primary/60 backdrop-blur-[2px]"></div>
+                <div class="relative z-10 px-12">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="w-12 h-12 bg-white/20 backdrop-blur-md rounded-xl flex items-center justify-center text-white border border-white/30">
+                            <i data-lucide="<%= category.icon %>" class="w-6 h-6"></i>
+                        </div>
+                        <h1 class="text-4xl md:text-5xl font-extrabold text-white"><%= category.name %></h1>
+                    </div>
+                    <p class="text-white/80 text-lg max-w-2xl">Discover service projects dedicated to <%= category.name.toLowerCase() %> initiatives.</p>
+                </div>
+            </header>
+
+            <div>
+                <div class="flex items-center gap-4 mb-8">
+                    <h3 class="text-2xl font-bold text-primary">Service Projects in this Category</h3>
+                    <div class="flex-grow h-px bg-outline"></div>
+                </div>
+                
+                <% if (projects.length > 0) { %>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <% projects.forEach(project => { %>
+                            <div class="bg-surface-container border border-outline rounded-card overflow-hidden flex flex-col transition-all card-hover">
+                                <div class="h-48 relative overflow-hidden">
+                                    <img src="<%= project.image_url %>" alt="<%= project.title %>" class="w-full h-full object-cover">
+                                    <div class="absolute top-4 left-4">
+                                        <span class="px-3 py-1 bg-white/90 backdrop-blur-sm text-primary text-[10px] font-bold uppercase tracking-wider rounded-full shadow-sm">
+                                            <%= project.organization_name %>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="p-6 flex-grow">
+                                    <h4 class="text-xl font-bold mb-3">
+                                        <a href="/project/<%= project.project_id %>" class="hover:text-secondary transition-colors"><%= project.title %></a>
+                                    </h4>
+                                    <p class="text-slate-600 text-sm mb-4 line-clamp-3"><%= project.description %></p>
+                                    <div class="flex items-center gap-2 text-slate-500 text-xs font-semibold">
+                                        <i data-lucide="map-pin" class="w-4 h-4 text-secondary"></i>
+                                        <%= project.location %>
+                                    </div>
+                                </div>
+                                <div class="px-6 py-4 bg-surface border-t border-outline flex justify-between items-center">
+                                    <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">
+                                        <%= project.date instanceof Date ? project.date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : new Date(project.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) %>
+                                    </span>
+                                    <a href="/project/<%= project.project_id %>" class="text-secondary font-bold text-sm hover:underline flex items-center gap-1">
+                                        Details <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        <% }); %>
+                    </div>
+                <% } else { %>
+                    <div class="text-center py-20 bg-surface rounded-card border-2 border-dashed border-outline">
+                        <div class="w-16 h-16 bg-outline rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i data-lucide="info" class="text-slate-400 w-8 h-8"></i>
+                        </div>
+                        <p class="text-slate-500 font-medium">No projects found for this category yet.</p>
+                        <a href="/categories" class="inline-block mt-6 px-6 py-3 bg-primary text-white font-bold rounded-lg hover:bg-secondary transition-all">
+                            Explore other categories
+                        </a>
+                    </div>
+                <% } %>
+            </div>
+        <% } else { %>
+            <div class="text-center py-32 bg-surface-container rounded-[32px] border border-outline">
+                <div class="w-24 h-24 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-8">
+                    <i data-lucide="alert-circle" class="text-red-500 w-12 h-12"></i>
+                </div>
+                <h2 class="text-3xl font-extrabold text-primary mb-4">Category Not Found</h2>
+                <p class="text-slate-500 mb-12 max-w-md mx-auto">The category you are looking for does not exist or has been removed.</p>
+                <a href="/categories" class="px-8 py-4 bg-primary text-white font-extrabold rounded-2xl hover:bg-secondary transition-all shadow-lg">
+                    Return to Categories
+                </a>
+            </div>
+        <% } %>
+    </div>
+</section>
+
+<%- include('partials/footer') %>

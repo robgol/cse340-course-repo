@@ -1,0 +1,116 @@
+<%- include('partials/header') %>
+
+<section class="py-16">
+    <div class="max-container">
+        <!-- Breadcrumb / Back Navigation -->
+        <nav class="mb-8">
+            <a href="/projects" class="inline-flex items-center gap-2 text-slate-500 hover:text-secondary font-bold transition-colors">
+                <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                Back to Upcoming Projects
+            </a>
+        </nav>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+            <!-- Project Main Content -->
+            <div class="lg:col-span-2 space-y-12">
+                <div class="bg-surface-container border border-outline rounded-[32px] overflow-hidden shadow-sm">
+                    <div class="h-[400px] relative overflow-hidden">
+                        <img src="<%= project.image_url %>" alt="<%= project.title %>" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-primary/60 to-transparent"></div>
+                        <div class="absolute bottom-8 left-8 right-8">
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <% categories.forEach(cat => { %>
+                                    <a href="/category/<%= cat.category_id %>" class="px-3 py-1 bg-secondary text-white text-[10px] font-bold uppercase tracking-wider rounded-full hover:bg-white hover:text-secondary transition-colors shadow-sm">
+                                        <%= cat.name %>
+                                    </a>
+                                <% }); %>
+                            </div>
+                            <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-4"><%= project.title %></h1>
+                        </div>
+                    </div>
+                    
+                    <div class="p-8 md:p-12">
+                        <div class="flex flex-wrap gap-8 mb-12 py-8 border-y border-outline">
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 bg-secondary/10 rounded-xl flex items-center justify-center">
+                                    <i data-lucide="calendar" class="text-secondary w-6 h-6"></i>
+                                </div>
+                                <div>
+                                    <div class="text-xs font-bold text-slate-400 uppercase tracking-widest">Date</div>
+                                    <div class="text-primary font-bold"><%= project.date instanceof Date ? project.date.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) : new Date(project.date).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) %></div>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 bg-secondary/10 rounded-xl flex items-center justify-center">
+                                    <i data-lucide="map-pin" class="text-secondary w-6 h-6"></i>
+                                </div>
+                                <div>
+                                    <div class="text-xs font-bold text-slate-400 uppercase tracking-widest">Location</div>
+                                    <div class="text-primary font-bold"><%= project.location %></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="prose prose-slate max-w-none">
+                            <h3 class="text-2xl font-bold text-primary mb-6">About this Project</h3>
+                            <p class="text-lg text-slate-600 leading-relaxed mb-8">
+                                <%= project.description %>
+                            </p>
+                        </div>
+
+                        <div class="mt-12 flex gap-4">
+                            <button class="px-8 py-4 bg-primary text-white font-extrabold rounded-2xl hover:bg-secondary transition-all card-hover shadow-lg">
+                                Volunteer Now
+                            </button>
+                            <button class="p-4 bg-white border border-outline text-slate-400 hover:text-red-500 rounded-2xl transition-all">
+                                <i data-lucide="heart" class="w-6 h-6"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Organization / Sidebar -->
+            <aside class="space-y-8">
+                <div class="bg-surface-container border border-outline rounded-[32px] p-8 shadow-sm sticky top-28">
+                    <h3 class="text-xl font-bold text-primary mb-8 pb-4 border-b border-outline">Organized By</h3>
+                    
+                    <div class="flex flex-col items-center text-center">
+                        <div class="w-24 h-24 bg-white rounded-2xl flex items-center justify-center border border-outline mb-6 p-4">
+                            <!-- Note: We don't have the logo_filename in the project query results yet, but we have organization_name. 
+                                 The instruction didn't ask for the logo here, but let's keep it consistent. 
+                                 Wait, the model function doesn't return logo_filename for project details. 
+                                 I'll just use a generic icon for now or I can update the model if needed. 
+                                 Actually, I'll update the model to include logo_filename as it's better for UX. -->
+                            <i data-lucide="building-2" class="w-12 h-12 text-secondary"></i>
+                        </div>
+                        <h4 class="text-2xl font-extrabold text-primary mb-2"><%= project.organization_name %></h4>
+                        <a href="/organization/<%= project.organization_id %>" class="text-secondary font-bold hover:underline flex items-center gap-1 mb-8">
+                            View Organization Profile <i data-lucide="external-link" class="w-4 h-4"></i>
+                        </a>
+                        
+                        <p class="text-slate-500 text-sm mb-10 leading-relaxed">
+                            This project is managed by <%= project.organization_name %>. Join them and other volunteers to make a difference in our community.
+                        </p>
+                        
+                        <a href="mailto:contact@cse340service.org" class="w-full py-4 bg-surface border border-outline text-primary font-bold rounded-2xl hover:bg-outline transition-colors text-center">
+                            Contact Organizer
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Share Widget -->
+                <div class="bg-primary rounded-[32px] p-8 text-white">
+                    <h4 class="font-bold mb-4">Share this Opportunity</h4>
+                    <div class="flex gap-4">
+                        <button class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-secondary transition-colors"><i data-lucide="twitter" class="w-5 h-5"></i></button>
+                        <button class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-secondary transition-colors"><i data-lucide="facebook" class="w-5 h-5"></i></button>
+                        <button class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-secondary transition-colors"><i data-lucide="link" class="w-5 h-5"></i></button>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </div>
+</section>
+
+<%- include('partials/footer') %>

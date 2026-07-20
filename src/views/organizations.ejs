@@ -16,7 +16,11 @@
                         <div class="w-20 h-20 bg-white rounded-full flex items-center justify-center mb-4 border border-outline overflow-hidden p-2">
                             <img src="/images/<%= org.logo_filename %>" alt="<%= org.name %> logo" class="w-full h-full object-contain">
                         </div>
-                        <h3 class="text-xl font-bold mb-3"><%= org.name %></h3>
+                        <h3 class="text-xl font-bold mb-3">
+                            <a href="/organization/<%= org.organization_id %>" class="hover:text-secondary transition-colors">
+                                <%= org.name %>
+                            </a>
+                        </h3>
                         <p class="text-slate-600 text-sm mb-6 flex-grow"><%= org.description %></p>
                         <a href="mailto:<%= org.contact_email %>" class="w-full py-3 px-4 bg-primary text-white text-sm font-bold rounded-lg hover:bg-secondary transition-colors">
                             Contact Organization

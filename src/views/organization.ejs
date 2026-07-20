@@ -1,0 +1,71 @@
+<%- include('partials/header') %>
+
+<section class="py-16">
+    <div class="max-container">
+        <header class="text-center mb-16">
+            <h1 class="text-4xl font-bold mb-4"><%= title %></h1>
+            <div class="w-20 h-1 bg-secondary mx-auto"></div>
+        </header>
+
+        <div class="bg-surface-container border border-outline rounded-card p-12 mb-16">
+            <div class="flex flex-col md:flex-row gap-12 items-center md:items-start">
+                <div class="w-48 h-48 bg-white rounded-2xl flex items-center justify-center border border-outline overflow-hidden p-6 shadow-sm">
+                    <img src="/images/<%= organizationDetails.logo_filename %>" alt="<%= organizationDetails.name %> logo" class="w-full h-full object-contain">
+                </div>
+                <div class="flex-grow text-center md:text-left">
+                    <h2 class="text-3xl font-extrabold mb-6 text-primary"><%= organizationDetails.name %></h2>
+                    <p class="text-lg text-slate-600 leading-relaxed max-w-3xl"><%= organizationDetails.description %></p>
+                    <div class="mt-8 flex flex-wrap gap-4 justify-center md:justify-start">
+                        <a href="mailto:<%= organizationDetails.contact_email %>" class="inline-flex items-center gap-2 px-6 py-3 bg-primary text-white font-bold rounded-lg hover:bg-secondary transition-colors">
+                            <i data-lucide="mail" class="w-5 h-5"></i>
+                            Contact Organization
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <div class="flex items-center gap-4 mb-8">
+                <h3 class="text-2xl font-bold text-primary">Associated Service Projects</h3>
+                <div class="flex-grow h-px bg-outline"></div>
+            </div>
+            
+            <% if (projects.length > 0) { %>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <% projects.forEach(project => { %>
+                        <div class="bg-surface-container border border-outline rounded-card overflow-hidden flex flex-col transition-all card-hover">
+                            <div class="p-6 flex-grow">
+                                <h4 class="text-xl font-bold mb-3">
+                                    <a href="/project/<%= project.project_id %>" class="hover:text-secondary transition-colors"><%= project.title %></a>
+                                </h4>
+                                <p class="text-slate-600 text-sm mb-4 line-clamp-3"><%= project.description %></p>
+                                <div class="flex items-center gap-2 text-slate-500 text-xs font-semibold">
+                                    <i data-lucide="map-pin" class="w-4 h-4 text-secondary"></i>
+                                    <%= project.location %>
+                                </div>
+                            </div>
+                            <div class="px-6 py-4 bg-surface border-t border-outline flex justify-between items-center">
+                                <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">
+                                    <%= project.date instanceof Date ? project.date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : new Date(project.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) %>
+                                </span>
+                                <a href="/project/<%= project.project_id %>" class="text-secondary font-bold text-sm hover:underline flex items-center gap-1">
+                                    Details <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                                </a>
+                            </div>
+                        </div>
+                    <% }); %>
+                </div>
+            <% } else { %>
+                <div class="text-center py-20 bg-surface rounded-card border-2 border-dashed border-outline">
+                    <div class="w-16 h-16 bg-outline rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i data-lucide="briefcase" class="text-slate-400 w-8 h-8"></i>
+                    </div>
+                    <p class="text-slate-500 font-medium">No service projects found for this organization.</p>
+                </div>
+            <% } %>
+        </div>
+    </div>
+</section>
+
+<%- include('partials/footer') %>
