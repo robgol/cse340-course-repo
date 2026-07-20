@@ -37,9 +37,10 @@ app.use((req, res, next) => {
     next(); // Pass control to the next middleware or route
 });
 
-// Middleware to make NODE_ENV available to all templates
+// Middleware to make NODE_ENV and current path available to all templates
 app.use((req, res, next) => {
     res.locals.NODE_ENV = NODE_ENV;
+    res.locals.currentPath = req.path;
     next();
 });
 

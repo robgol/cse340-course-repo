@@ -43,10 +43,10 @@
             </a>
             <nav>
                 <ul class="flex gap-8 font-semibold">
-                    <li><a href="/" class="hover:text-secondary transition-colors <%= title === 'Home' ? 'text-secondary' : '' %>">Home</a></li>
-                    <li><a href="/organizations" class="hover:text-secondary transition-colors <%= title === 'Our Partner Organizations' ? 'text-secondary' : '' %>">Organizations</a></li>
-                    <li><a href="/projects" class="hover:text-secondary transition-colors <%= title === 'Service Projects' ? 'text-secondary' : '' %>">Projects</a></li>
-                    <li><a href="/categories" class="hover:text-secondary transition-colors <%= title === 'Service Project Categories' ? 'text-secondary' : '' %>">Categories</a></li>
+                    <li><a href="/" class="hover:text-secondary transition-colors <%= currentPath === '/' ? 'text-secondary font-bold' : '' %>">Home</a></li>
+                    <li><a href="/organizations" class="hover:text-secondary transition-colors <%= currentPath.startsWith('/organization') ? 'text-secondary font-bold' : '' %>">Organizations</a></li>
+                    <li><a href="/projects" class="hover:text-secondary transition-colors <%= currentPath.startsWith('/project') ? 'text-secondary font-bold' : '' %>">Projects</a></li>
+                    <li><a href="/categories" class="hover:text-secondary transition-colors <%= currentPath.startsWith('/categor') ? 'text-secondary font-bold' : '' %>">Categories</a></li>
                 </ul>
             </nav>
         </div>
