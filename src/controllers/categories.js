@@ -8,12 +8,23 @@ const showCategoriesPage = async (req, res) => {
     res.render('categories', { title, categories });
 };
 
-const showCategoryDetailsPage = async (req, res) => {
-    const categoryId = req.params.id;
-    const category = await getCategoryDetails(categoryId);
-    const projects = await getProjectsByCategoryId(categoryId);
-    const title = category ? `${category.name} Projects` : 'Category Not Found';
-    res.render('category', { title, category, projects });
+const showCategoryDetailsPage = async (req, res, next) => {
+    try {
+        const categoryId = req.params.id;
+        const category = await getCategoryDetails(categoryId);
+
+        if (!category) {
+            const err = new Error('Category not found');
+            err.status = 404;
+            return next(err);
+        }
+
+        const projects = await getProjectsByCategoryId(categoryId);
+        const title = `${category.name} Projects`;
+        res.render('category', { title, category, projects });
+    } catch (error) {
+        next(error);
+    }
 };
 
 // Export any controller functions

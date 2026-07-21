@@ -9,12 +9,23 @@ const showOrganizationsPage = async (req, res) => {
     res.render('organizations', { title, organizations });
 };
 
-const showOrganizationDetailsPage = async (req, res) => {
-    const organizationId = req.params.id;
-    const organizationDetails = await getOrganizationDetails(organizationId);
-    const projects = await getProjectsByOrganizationId(organizationId);
-    const title = 'Organization Details';
-    res.render('organization', { title, organizationDetails, projects });
+const showOrganizationDetailsPage = async (req, res, next) => {
+    try {
+        const organizationId = req.params.id;
+        const organizationDetails = await getOrganizationDetails(organizationId);
+
+        if (!organizationDetails) {
+            const err = new Error('Organization not found');
+            err.status = 404;
+            return next(err);
+        }
+
+        const projects = await getProjectsByOrganizationId(organizationId);
+        const title = 'Organization Details';
+        res.render('organization', { title, organizationDetails, projects });
+    } catch (error) {
+        next(error);
+    }
 };
 
 // Export any controller functions
