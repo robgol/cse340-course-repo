@@ -31,6 +31,14 @@
     <link rel="stylesheet" href="/css/main.css">
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Select2 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <!-- jQuery (required for Select2) -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <!-- Select2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body class="bg-surface text-primary min-h-screen flex flex-col">
     <header class="bg-surface-container border-b border-outline sticky top-0 z-50">
@@ -52,3 +60,18 @@
         </div>
     </header>
     <main class="flex-grow">
+    <% const messages = flash(); %>
+    <script>
+    <% Object.keys(messages).forEach(type => { %>
+        <% if (messages[type].length > 0) { %>
+            <% messages[type].forEach(msg => { %>
+                Swal.fire({
+                    icon: '<%= type === "error" ? "error" : (type === "success" ? "success" : (type === "warning" ? "warning" : "info")) %>',
+                    title: '<%= type === "error" ? "Error" : (type === "success" ? "Success" : (type === "warning" ? "Warning" : "Info")) %>',
+                    text: '<%= msg %>',
+                    confirmButtonColor: '#0d9488'
+                });
+            <% }); %>
+        <% } %>
+    <% }); %>
+    </script>

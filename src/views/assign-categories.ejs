@@ -1,0 +1,47 @@
+<%- include('partials/header') %>
+
+<section class="py-16">
+    <div class="max-container max-w-3xl mx-auto">
+        <header class="text-center mb-12">
+            <h1 class="text-4xl font-bold mb-4"><%= projectDetails.title %></h1>
+            <div class="w-20 h-1 bg-secondary mx-auto mb-4"></div>
+            <h2 class="text-xl font-semibold text-slate-700"><%= title %></h2>
+        </header>
+
+        <div class="bg-white p-8 rounded-card border border-outline shadow-sm">
+            <form action="/assign-categories/<%= projectId %>" method="POST" class="space-y-8">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <% categories.forEach(category => { %>
+                    <div class="flex items-center gap-3 p-4 border border-outline rounded-xl hover:border-secondary/50 hover:bg-surface transition-all cursor-pointer group">
+                      <div class="relative flex items-center">
+                        <input
+                          type="checkbox"
+                          id="category-<%= category.category_id %>"
+                          name="categoryIds"
+                          value="<%= category.category_id %>"
+                          <%= assignedCategories.some(ac => ac.category_id === category.category_id) ? 'checked' : '' %>
+                          class="w-6 h-6 rounded border-outline text-secondary focus:ring-secondary focus:ring-offset-0 cursor-pointer transition-colors"
+                        />
+                      </div>
+                      <label for="category-<%= category.category_id %>" class="flex-grow cursor-pointer font-medium text-slate-700 group-hover:text-secondary transition-colors">
+                        <%= category.name %>
+                      </label>
+                    </div>
+                  <% }); %>
+                </div>
+
+                <div class="pt-6 border-t border-outline">
+                    <button type="submit" 
+                        class="w-full py-4 bg-secondary text-white font-bold rounded-xl hover:bg-opacity-90 transition-all card-hover shadow-lg shadow-secondary/20">
+                        Update Categories
+                    </button>
+                    <a href="/project/<%= projectId %>" class="block text-center mt-4 text-slate-500 hover:text-slate-700 font-medium transition-colors">
+                        Cancel and return to project details
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+<%- include('partials/footer') %>

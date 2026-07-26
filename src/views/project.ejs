@@ -18,12 +18,15 @@
                         <img src="<%= project.image_url %>" alt="<%= project.title %>" class="w-full h-full object-cover">
                         <div class="absolute inset-0 bg-gradient-to-t from-primary/60 to-transparent"></div>
                         <div class="absolute bottom-8 left-8 right-8">
-                            <div class="flex flex-wrap gap-2 mb-4">
+                            <div class="flex flex-wrap gap-3 mb-6 items-center">
                                 <% categories.forEach(cat => { %>
-                                    <a href="/category/<%= cat.category_id %>" class="px-3 py-1 bg-secondary text-white text-[10px] font-bold uppercase tracking-wider rounded-full hover:bg-white hover:text-secondary transition-colors shadow-sm">
+                                    <a href="/category/<%= cat.category_id %>" class="px-4 py-1.5 bg-secondary/90 backdrop-blur-sm text-white text-[11px] font-bold uppercase tracking-wider rounded-full hover:bg-white hover:text-secondary transition-all shadow-md">
                                         <%= cat.name %>
                                     </a>
                                 <% }); %>
+                                <a href="/assign-categories/<%= project.project_id %>" class="px-4 py-2 bg-white text-secondary text-xs font-black uppercase tracking-widest rounded-full hover:bg-secondary hover:text-white transition-all shadow-2xl inline-flex items-center gap-2 transform hover:scale-105 border-2 border-white active:scale-95">
+                                    <i data-lucide="tag" class="w-4 h-4"></i> Edit Categories
+                                </a>
                             </div>
                             <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-4"><%= project.title %></h1>
                         </div>
@@ -51,8 +54,14 @@
                             </div>
                         </div>
 
+                        <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
+                            <h3 class="text-2xl font-bold text-primary">About this Project</h3>
+                            <a href="/assign-categories/<%= project.project_id %>" class="px-4 py-2 bg-surface border border-outline text-secondary hover:bg-secondary hover:text-white rounded-xl font-bold flex items-center gap-2 transition-all card-hover shadow-sm">
+                                <i data-lucide="tag" class="w-5 h-5"></i> Manage Categories
+                            </a>
+                        </div>
+
                         <div class="prose prose-slate max-w-none">
-                            <h3 class="text-2xl font-bold text-primary mb-6">About this Project</h3>
                             <p class="text-lg text-slate-600 leading-relaxed mb-8">
                                 <%= project.description %>
                             </p>

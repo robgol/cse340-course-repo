@@ -8,10 +8,16 @@
                 <h1 class="text-4xl font-bold mb-2"><%= title %></h1>
                 <p class="text-slate-600">Discover opportunities to contribute your skills.</p>
             </div>
-            <button class="flex items-center gap-2 px-6 py-3 bg-white border border-outline rounded-xl font-bold hover:bg-surface transition-colors">
-                <i data-lucide="filter" class="w-5 h-5"></i>
-                Filter Results
-            </button>
+            <div class="flex gap-4">
+                <a href="/new-project" class="flex items-center gap-2 px-6 py-3 bg-secondary text-white rounded-xl font-bold hover:bg-opacity-90 transition-all card-hover shadow-lg shadow-secondary/20">
+                    <i data-lucide="plus-circle" class="w-5 h-5"></i>
+                    Add New Project
+                </a>
+                <button class="flex items-center gap-2 px-6 py-3 bg-white border border-outline rounded-xl font-bold hover:bg-surface transition-colors">
+                    <i data-lucide="filter" class="w-5 h-5"></i>
+                    Filter Results
+                </button>
+            </div>
         </div>
 
         <!-- Project Listings -->

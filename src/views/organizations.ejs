@@ -2,9 +2,15 @@
 
 <section class="py-16">
     <div class="max-container">
-        <header class="text-center mb-16">
-            <h1 class="text-4xl font-bold mb-4"><%= title %></h1>
-            <div class="w-20 h-1 bg-secondary mx-auto"></div>
+        <header class="flex flex-col md:flex-row justify-between items-center mb-16 gap-6">
+            <div class="text-center md:text-left">
+                <h1 class="text-4xl font-bold mb-4"><%= title %></h1>
+                <div class="w-20 h-1 bg-secondary mx-auto md:mx-0"></div>
+            </div>
+            <a href="/new-organization" class="flex items-center gap-2 py-4 px-8 bg-secondary text-white font-bold rounded-full hover:bg-opacity-90 transition-all card-hover shadow-lg shadow-secondary/20">
+                <i data-lucide="plus-circle" class="w-5 h-5"></i>
+                Add New Organization
+            </a>
         </header>
 
         <div class="grid grid-cols-1 lg:grid-cols-4 gap-12">
@@ -63,9 +69,9 @@
                             </div>
                         </div>
                     </div>
-                    <button class="w-full mt-10 py-4 px-6 bg-secondary text-white font-bold rounded-xl hover:bg-white hover:text-secondary transition-all card-hover">
+                    <a href="/new-organization" class="inline-block w-full text-center mt-10 py-4 px-6 bg-secondary text-white font-bold rounded-xl hover:bg-white hover:text-secondary transition-all card-hover">
                         Become a Partner
-                    </button>
+                    </a>
                 </div>
             </aside>
         </div>

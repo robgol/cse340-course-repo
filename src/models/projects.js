@@ -77,5 +77,27 @@ const getProjectDetails = async (id) => {
     return result.rows.length > 0 ? result.rows[0] : null;
 };
 
+const createProject = async (title, description, location, date, organizationId) => {
+    const imageUrl = 'https://loremflickr.com/800/600/service,volunteer/all';
+    const query = `
+      INSERT INTO service_projects (title, description, location, date, organization_id, image_url)
+      VALUES ($1, $2, $3, $4, $5, $6)
+      RETURNING project_id;
+    `;
+
+    const queryParams = [title, description, location, date, organizationId, imageUrl];
+    const result = await db.query(query, queryParams);
+
+    if (result.rows.length === 0) {
+        throw new Error('Failed to create project');
+    }
+
+    if (process.env.ENABLE_SQL_LOGGING === 'true') {
+        console.log('Created new project with ID:', result.rows[0].project_id);
+    }
+
+    return result.rows[0].project_id;
+}
+
 // Export the model functions
-export { getAllProjects, getProjectsByOrganizationId, getUpcomingProjects, getProjectDetails };
+export { getAllProjects, getProjectsByOrganizationId, getUpcomingProjects, getProjectDetails, createProject };
