@@ -1,7 +1,7 @@
 // Import any needed model functions
 import { body, validationResult } from 'express-validator';
-import { getUpcomingProjects, getProjectDetails, createProject } from '../models/projects.js';
-import { getCategoriesByProjectId } from '../models/categories.js';
+import { getUpcomingProjects, getProjectDetails, createProject, updateProject } from '../models/projects.js';
+import { getCategoriesByProjectId, getAllCategories, updateCategoryAssignments } from '../models/categories.js';
 import { getAllOrganizations } from '../models/organizations.js';
 
 const NUMBER_OF_UPCOMING_PROJECTS = 5;
@@ -56,9 +56,10 @@ const showProjectDetailsPage = async (req, res, next) => {
 
 const showNewProjectForm = async (req, res) => {
     const organizations = await getAllOrganizations();
+    const categories = await getAllCategories();
     const title = 'Add New Service Project';
 
-    res.render('new-project', { title, organizations });
+    res.render('new-project', { title, organizations, categories });
 }
 
 const processNewProjectForm = async (req, res) => {
@@ -75,11 +76,17 @@ const processNewProjectForm = async (req, res) => {
     }
 
     // Extract form data from req.body
-    const { title, description, location, date, organizationId } = req.body;
+    const { title, description, location, date, organizationId, categoryIds } = req.body;
 
     try {
         // Create the new project in the database
         const newProjectId = await createProject(title, description, location, date, organizationId);
+
+        // Assign categories if any were selected
+        if (categoryIds) {
+            const categoryIdsArray = Array.isArray(categoryIds) ? categoryIds : [categoryIds];
+            await updateCategoryAssignments(newProjectId, categoryIdsArray);
+        }
 
         req.flash('success', 'New service project created successfully!');
         res.redirect(`/project/${newProjectId}`);
@@ -90,5 +97,61 @@ const processNewProjectForm = async (req, res) => {
     }
 }
 
+const showEditProjectForm = async (req, res, next) => {
+    try {
+        const projectId = req.params.id;
+        const project = await getProjectDetails(projectId);
+        
+        if (!project) {
+            const err = new Error('Project not found');
+            err.status = 404;
+            return next(err);
+        }
+
+        const organizations = await getAllOrganizations();
+        const categories = await getAllCategories();
+        const assignedCategories = await getCategoriesByProjectId(projectId);
+        const title = 'Edit Service Project';
+
+        res.render('edit-project', { title, project, organizations, categories, assignedCategories });
+    } catch (error) {
+        next(error);
+    }
+}
+
+const processEditProjectForm = async (req, res, next) => {
+    // Check for validation errors
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        // Loop through validation errors and flash them
+        errors.array().forEach((error) => {
+            req.flash('error', error.msg);
+        });
+
+        // Redirect back to the edit project form
+        return res.redirect(`/edit-project/${req.params.id}`);
+    }
+
+    // Extract form data from req.body
+    const projectId = req.params.id;
+    const { title, description, location, date, organizationId, categoryIds } = req.body;
+
+    try {
+        // Update the project in the database
+        await updateProject(projectId, title, description, location, date, organizationId);
+
+        // Update category assignments
+        const categoryIdsArray = categoryIds ? (Array.isArray(categoryIds) ? categoryIds : [categoryIds]) : [];
+        await updateCategoryAssignments(projectId, categoryIdsArray);
+
+        req.flash('success', 'Service project updated successfully!');
+        res.redirect(`/project/${projectId}`);
+    } catch (error) {
+        console.error('Error updating project:', error);
+        req.flash('error', 'There was an error updating the service project.');
+        res.redirect(`/edit-project/${projectId}`);
+    }
+}
+
 // Export any controller functions
-export { showProjectsPage, showProjectDetailsPage, showNewProjectForm, processNewProjectForm, projectValidation };
+export { showProjectsPage, showProjectDetailsPage, showNewProjectForm, processNewProjectForm, showEditProjectForm, processEditProjectForm, projectValidation };

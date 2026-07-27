@@ -2,9 +2,15 @@
 
 <section class="py-16">
     <div class="max-container">
-        <header class="mb-16">
-            <h1 class="text-4xl font-bold mb-4"><%= title %></h1>
-            <p class="text-slate-600">Find the right cause for your passions and skills.</p>
+        <header class="mb-16 flex flex-col md:flex-row md:items-center justify-between gap-6">
+            <div>
+                <h1 class="text-4xl font-bold mb-4"><%= title %></h1>
+                <p class="text-slate-600">Find the right cause for your passions and skills.</p>
+            </div>
+            <a href="/new-category" class="inline-flex items-center gap-2 px-8 py-4 bg-secondary text-white font-bold rounded-full hover:bg-opacity-90 transition-all card-hover shadow-lg shadow-secondary/20 whitespace-nowrap">
+                <i data-lucide="plus-circle" class="w-6 h-6"></i>
+                Add New Category
+            </a>
         </header>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">

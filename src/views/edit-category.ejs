@@ -1,0 +1,155 @@
+<%- include('partials/header') %>
+
+<section class="py-16">
+    <div class="max-container max-w-2xl">
+        <nav class="mb-8">
+            <a href="/category/<%= category.category_id %>" class="inline-flex items-center gap-2 text-slate-500 hover:text-secondary font-bold transition-colors">
+                <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                Back to Category Details
+            </a>
+        </nav>
+
+        <div class="bg-surface-container border border-outline rounded-[32px] p-8 md:p-12 shadow-sm">
+            <h1 class="text-3xl font-extrabold text-primary mb-2"><%= title %></h1>
+            <p class="text-slate-500 mb-10 font-medium">Update the details for the <%= category.name %> category.</p>
+
+            <form action="/edit-category/<%= category.category_id %>" method="POST" class="space-y-6">
+                <div class="space-y-2">
+                    <label for="name" class="block text-sm font-bold text-slate-700">Category Name</label>
+                    <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        required
+                        minlength="3"
+                        maxlength="100"
+                        value="<%= category.name %>"
+                        class="w-full px-5 py-4 bg-surface border border-outline rounded-xl focus:ring-2 focus:ring-secondary/20 focus:border-secondary outline-none transition-all placeholder:text-slate-400 font-medium"
+                    />
+                </div>
+
+                <div class="space-y-2">
+                    <label for="icon" class="block text-sm font-bold text-slate-700">Lucide Icon Name</label>
+                    <input
+                        type="text"
+                        id="icon"
+                        name="icon"
+                        required
+                        maxlength="50"
+                        value="<%= category.icon %>"
+                        class="w-full px-5 py-4 bg-surface border border-outline rounded-xl focus:ring-2 focus:ring-secondary/20 focus:border-secondary outline-none transition-all placeholder:text-slate-400 font-medium"
+                    />
+                    <p class="text-xs text-slate-400 italic">Enter any icon name from lucide.dev</p>
+                </div>
+
+                <div class="space-y-2">
+                    <label for="color" class="block text-sm font-bold text-slate-700">Tailwind Gradient Classes</label>
+                    <% 
+                    const gradients = [
+                        { value: 'from-emerald-400 to-emerald-600', label: 'Emerald Green' },
+                        { value: 'from-blue-400 to-blue-600', label: 'Ocean Blue' },
+                        { value: 'from-purple-400 to-purple-600', label: 'Royal Purple' },
+                        { value: 'from-pink-400 to-pink-600', label: 'Cotton Pink' },
+                        { value: 'from-rose-400 to-rose-600', label: 'Deep Rose' },
+                        { value: 'from-orange-400 to-orange-600', label: 'Sunset Orange' },
+                        { value: 'from-amber-400 to-amber-600', label: 'Golden Amber' },
+                        { value: 'from-sky-400 to-sky-600', label: 'Sky Blue' },
+                        { value: 'from-indigo-400 to-indigo-600', label: 'Classic Indigo' },
+                        { value: 'from-slate-400 to-slate-600', label: 'Slate Gray' }
+                    ];
+                    const isCustom = category.color && !gradients.some(g => g.value === category.color);
+                    %>
+                    <select
+                        id="color"
+                        name="color"
+                        required
+                        class="w-full px-5 py-4 bg-surface border border-outline rounded-xl focus:ring-2 focus:ring-secondary/20 focus:border-secondary outline-none transition-all font-medium"
+                    >
+                        <option value="">Select a gradient</option>
+                        <% gradients.forEach(g => { %>
+                            <option value="<%= g.value %>" <%= category.color === g.value ? 'selected' : '' %>><%= g.label %></option>
+                        <% }); %>
+                        <% if (isCustom) { %>
+                            <option value="<%= category.color %>" selected>Custom Gradient (<%= category.color %>)</option>
+                        <% } %>
+                    </select>
+                    <p class="text-xs text-slate-400 italic">Select a gradient style for this category</p>
+                </div>
+
+                <div class="space-y-2">
+                    <label for="imageUrl" class="block text-sm font-bold text-slate-700">Header Image URL</label>
+                    <input
+                        type="url"
+                        id="imageUrl"
+                        name="imageUrl"
+                        required
+                        value="<%= category.image_url %>"
+                        class="w-full px-5 py-4 bg-surface border border-outline rounded-xl focus:ring-2 focus:ring-secondary/20 focus:border-secondary outline-none transition-all placeholder:text-slate-400 font-medium"
+                    />
+                </div>
+
+                <div class="pt-4">
+                    <button type="submit" 
+                        class="w-full py-4 bg-secondary text-white font-bold rounded-xl hover:bg-opacity-90 transition-all card-hover shadow-lg shadow-secondary/20">
+                        Update Category
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+<script>
+    $(document).ready(function() {
+        function formatGradient(gradient) {
+            if (!gradient.id) { return gradient.text; }
+            var $gradient = $(
+                '<span class="flex items-center gap-3">' +
+                '<span class="w-8 h-4 rounded bg-gradient-to-r ' + gradient.id + '"></span>' +
+                '<span>' + gradient.text + '</span>' +
+                '</span>'
+            );
+            return $gradient;
+        };
+
+        $('#color').select2({
+            templateResult: formatGradient,
+            templateSelection: formatGradient,
+            minimumResultsForSearch: Infinity
+        });
+    });
+</script>
+
+<style>
+    .select2-container--default .select2-selection--single {
+        height: 56px !important;
+        padding: 10px 16px !important;
+        border-radius: 12px !important;
+        border-color: #e2e8f0 !important;
+        background-color: #f8f9ff !important;
+        display: flex !important;
+        align-items: center !important;
+    }
+    .select2-container--default .select2-selection--single .select2-selection__arrow {
+        height: 54px !important;
+    }
+    .select2-container--default .select2-selection--single .select2-selection__rendered {
+        padding: 0 !important;
+        font-weight: 500 !important;
+        color: #0f172a !important;
+    }
+    .select2-dropdown {
+        border-radius: 12px !important;
+        border-color: #e2e8f0 !important;
+        overflow: hidden !important;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1) !important;
+    }
+    .select2-results__option {
+        padding: 12px 20px !important;
+    }
+    .select2-container--default .select2-results__option--highlighted[aria-selected] {
+        background-color: #0d9488 !important;
+    }
+</style>
+
+<%- include('partials/footer') %>
