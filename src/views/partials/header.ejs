@@ -55,6 +55,12 @@
                     <li><a href="/organizations" class="hover:text-secondary transition-colors <%= currentPath.startsWith('/organization') ? 'text-secondary font-bold' : '' %>">Organizations</a></li>
                     <li><a href="/projects" class="hover:text-secondary transition-colors <%= currentPath.startsWith('/project') ? 'text-secondary font-bold' : '' %>">Projects</a></li>
                     <li><a href="/categories" class="hover:text-secondary transition-colors <%= currentPath.startsWith('/categor') ? 'text-secondary font-bold' : '' %>">Categories</a></li>
+                    <% if (isLoggedIn) { %>
+                        <li><a href="/logout" class="hover:text-secondary transition-colors">Logout</a></li>
+                    <% } else { %>
+                        <li><a href="/register" class="hover:text-secondary transition-colors <%= currentPath === '/register' ? 'text-secondary font-bold' : '' %>">Register</a></li>
+                        <li><a href="/login" class="hover:text-secondary transition-colors <%= currentPath === '/login' ? 'text-secondary font-bold' : '' %>">Login</a></li>
+                    <% } %>
                 </ul>
             </nav>
         </div>

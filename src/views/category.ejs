@@ -23,10 +23,12 @@
                     </div>
                     <p class="text-white/80 text-lg max-w-2xl">Discover service projects dedicated to <%= category.name.toLowerCase() %> initiatives.</p>
                 </div>
+                <% if (user && user.role_name === 'admin') { %>
                 <a href="/edit-category/<%= category.category_id %>" class="inline-flex items-center gap-2 px-6 py-3 bg-white text-primary font-bold rounded-xl hover:bg-secondary hover:text-white transition-all shadow-xl whitespace-nowrap">
                     <i data-lucide="edit-3" class="w-5 h-5"></i>
                     Edit Category
                 </a>
+                <% } %>
             </div>
         </header>
 

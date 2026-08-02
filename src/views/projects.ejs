@@ -9,10 +9,12 @@
                 <p class="text-slate-600">Discover opportunities to contribute your skills.</p>
             </div>
             <div class="flex gap-4">
+                <% if (user && user.role_name === 'admin') { %>
                 <a href="/new-project" class="flex items-center gap-2 px-6 py-3 bg-secondary text-white rounded-xl font-bold hover:bg-opacity-90 transition-all card-hover shadow-lg shadow-secondary/20">
                     <i data-lucide="plus-circle" class="w-5 h-5"></i>
                     Add New Project
                 </a>
+                <% } %>
                 <button class="flex items-center gap-2 px-6 py-3 bg-white border border-outline rounded-xl font-bold hover:bg-surface transition-colors">
                     <i data-lucide="filter" class="w-5 h-5"></i>
                     Filter Results
@@ -58,9 +60,11 @@
             <div class="relative z-10">
                 <h2 class="text-3xl font-bold mb-6">Have a project idea?</h2>
                 <p class="text-slate-400 max-w-xl mx-auto mb-10">If you know of a service opportunity that isn't listed here, we'd love to hear about it. Help us expand our reach!</p>
+                <% if (user && user.role_name === 'admin') { %>
                 <button class="px-10 py-4 bg-secondary text-white font-bold rounded-full hover:bg-white hover:text-secondary transition-all card-hover flex items-center gap-2 mx-auto">
                     Propose a Project <i data-lucide="plus" class="w-5 h-5"></i>
                 </button>
+                <% } %>
             </div>
         </div>
     </div>

@@ -1,0 +1,43 @@
+<%- include('partials/header') %>
+
+<section class="py-16">
+    <div class="max-container max-w-4xl mx-auto">
+        <header class="text-center mb-12">
+            <h1 class="text-4xl font-bold mb-4"><%= title %></h1>
+            <div class="w-20 h-1 bg-secondary mx-auto"></div>
+            <p class="mt-4 text-slate-600">Welcome to your dashboard. Here you can see your account details.</p>
+        </header>
+
+        <div class="bg-white p-8 rounded-card border border-outline shadow-sm overflow-hidden relative">
+            <div class="absolute top-0 right-0 w-32 h-32 bg-secondary/5 rounded-full -mr-16 -mt-16"></div>
+            
+            <div class="relative z-10 flex flex-col md:flex-row items-center gap-8">
+                <div class="w-24 h-24 bg-surface rounded-2xl flex items-center justify-center text-secondary">
+                    <i data-lucide="user" class="w-12 h-12"></i>
+                </div>
+                
+                <div class="flex-grow space-y-4">
+                    <h2 class="text-2xl font-bold text-primary">Account Information</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="space-y-1">
+                            <span class="text-sm font-bold text-slate-500 uppercase tracking-wider">Full Name</span>
+                            <p class="text-lg font-semibold text-primary"><%= name %></p>
+                        </div>
+                        <div class="space-y-1">
+                            <span class="text-sm font-bold text-slate-500 uppercase tracking-wider">Email Address</span>
+                            <p class="text-lg font-semibold text-primary"><%= email %></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-12 pt-8 border-t border-outline flex flex-wrap gap-4">
+                <a href="/logout" class="px-6 py-3 bg-rose-500 text-white font-bold rounded-xl hover:bg-rose-600 transition-all card-hover flex items-center gap-2">
+                    <i data-lucide="log-out" class="w-5 h-5"></i> Logout
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<%- include('partials/footer') %>

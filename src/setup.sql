@@ -6,6 +6,8 @@ DROP TABLE IF EXISTS project_categories CASCADE;
 DROP TABLE IF EXISTS categories CASCADE;
 DROP TABLE IF EXISTS service_projects CASCADE;
 DROP TABLE IF EXISTS organizations CASCADE;
+DROP TABLE IF EXISTS users CASCADE;
+DROP TABLE IF EXISTS roles CASCADE;
 
 -- =============================================================================
 -- 2. TABLE CREATION
@@ -59,6 +61,23 @@ CREATE TABLE project_categories (
         ON DELETE CASCADE
 );
 
+-- Create roles table
+CREATE TABLE roles (
+    role_id SERIAL PRIMARY KEY,
+    role_name VARCHAR(50) UNIQUE NOT NULL,
+    role_description TEXT
+);
+
+-- Create users table
+CREATE TABLE users (
+    user_id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
+    role_id INTEGER REFERENCES roles(role_id),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
 -- =============================================================================
 -- 3. DATA INSERTION (SEEDING)
 -- =============================================================================
@@ -110,6 +129,11 @@ INSERT INTO project_categories (project_id, category_id) VALUES
 (6, 1), (7, 1), (7, 2), (8, 1), (8, 2), (9, 1), (10, 1), (10, 4), -- GreenHarvest Growers maps
 (11, 4), (11, 5), (12, 1), (13, 4), (14, 4), (15, 2), (15, 4); -- UnityServe Volunteers maps
 
+-- Insert initial roles
+INSERT INTO roles (role_name, role_description) VALUES 
+    ('user', 'Standard user with basic access'),
+    ('admin', 'Administrator with full system access');
+
 -- =============================================================================
 -- 4. VERIFICATION QUERIES
 -- =============================================================================
@@ -118,3 +142,11 @@ SELECT c.name, c.icon, COUNT(pc.project_id) AS active_projects
 FROM categories c 
 LEFT JOIN project_categories pc ON c.category_id = pc.category_id 
 GROUP BY c.category_id, c.name, c.icon;
+
+-- Verify roles insertion
+SELECT * FROM roles;
+
+-- Verification of Join (can be used for testing)
+-- SELECT u.user_id, u.name, u.email, r.role_name, r.role_description
+-- FROM users u
+-- JOIN roles r ON u.role_id = r.role_id;
