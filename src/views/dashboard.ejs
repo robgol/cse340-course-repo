@@ -32,6 +32,11 @@
             </div>
             
             <div class="mt-12 pt-8 border-t border-outline flex flex-wrap gap-4">
+                <% if (user && user.role_name === 'admin') { %>
+                <a href="/users" class="px-6 py-3 bg-secondary text-white font-bold rounded-xl hover:bg-opacity-90 transition-all card-hover flex items-center gap-2">
+                    <i data-lucide="users" class="w-5 h-5"></i> Manage Users
+                </a>
+                <% } %>
                 <a href="/logout" class="px-6 py-3 bg-rose-500 text-white font-bold rounded-xl hover:bg-rose-600 transition-all card-hover flex items-center gap-2">
                     <i data-lucide="log-out" class="w-5 h-5"></i> Logout
                 </a>

@@ -1,0 +1,46 @@
+<%- include('partials/header') %>
+
+<section class="py-16">
+    <div class="max-container">
+        <header class="text-center mb-12">
+            <h1 class="text-4xl font-bold mb-4"><%= title %></h1>
+            <div class="w-20 h-1 bg-secondary mx-auto"></div>
+            <p class="mt-4 text-slate-600">Manage all registered users and their roles.</p>
+        </header>
+
+        <div class="bg-white rounded-card border border-outline shadow-sm overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="w-full text-left">
+                    <thead class="bg-surface border-b border-outline">
+                        <tr>
+                            <th class="px-6 py-4 font-bold text-primary uppercase tracking-wider text-sm">Name</th>
+                            <th class="px-6 py-4 font-bold text-primary uppercase tracking-wider text-sm">Email</th>
+                            <th class="px-6 py-4 font-bold text-primary uppercase tracking-wider text-sm">Role</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-outline">
+                        <% users.forEach(user => { %>
+                        <tr class="hover:bg-surface/50 transition-colors">
+                            <td class="px-6 py-4 font-medium text-primary"><%= user.name %></td>
+                            <td class="px-6 py-4 text-slate-600"><%= user.email %></td>
+                            <td class="px-6 py-4">
+                                <span class="px-3 py-1 rounded-full text-xs font-bold uppercase <%= user.role_name === 'admin' ? 'bg-secondary/10 text-secondary' : 'bg-slate-100 text-slate-600' %>">
+                                    <%= user.role_name %>
+                                </span>
+                            </td>
+                        </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <div class="mt-8 flex justify-center">
+            <a href="/dashboard" class="flex items-center gap-2 text-primary font-bold hover:text-secondary transition-colors">
+                <i data-lucide="arrow-left" class="w-5 h-5"></i> Back to Dashboard
+            </a>
+        </div>
+    </div>
+</section>
+
+<%- include('partials/footer') %>
