@@ -1,6 +1,18 @@
 // Import any needed model functions
 import { body, validationResult } from 'express-validator';
-import { getUpcomingProjects, getProjectDetails, createProject, updateProject } from '../models/projects.js';
+import { 
+    getUpcomingProjects, 
+    getProjectDetails, 
+    createProject, 
+    updateProject,
+    volunteerForProject,
+    removeVolunteer,
+    isUserVolunteering,
+    addFavorite,
+    removeFavorite,
+    getFavoriteProjects,
+    isProjectFavorite
+} from '../models/projects.js';
 import { getCategoriesByProjectId, getAllCategories, updateCategoryAssignments } from '../models/categories.js';
 import { getAllOrganizations } from '../models/organizations.js';
 
@@ -30,9 +42,23 @@ const projectValidation = [
 
 // Define any controller functions
 const showProjectsPage = async (req, res) => {
-    const projects = await getUpcomingProjects(NUMBER_OF_UPCOMING_PROJECTS);
-    const title = 'Upcoming Service Projects';
-    res.render('projects', { title, projects });
+    try {
+        const projects = await getUpcomingProjects(NUMBER_OF_UPCOMING_PROJECTS);
+        
+        if (req.session.user) {
+            const favoriteProjects = await getFavoriteProjects(req.session.user.user_id);
+            const favoriteIds = new Set(favoriteProjects.map(p => p.project_id));
+            projects.forEach(p => {
+                p.isFavorite = favoriteIds.has(p.project_id);
+            });
+        }
+
+        const title = 'Upcoming Service Projects';
+        res.render('projects', { title, projects });
+    } catch (error) {
+        console.error('Error loading projects page:', error);
+        res.status(500).send('An error occurred while loading projects.');
+    }
 };
 
 const showProjectDetailsPage = async (req, res, next) => {
@@ -48,7 +74,15 @@ const showProjectDetailsPage = async (req, res, next) => {
 
         const categories = await getCategoriesByProjectId(projectId);
         const title = 'Project Details';
-        res.render('project', { title, project, categories });
+        
+        let isVolunteering = false;
+        let isFavorite = false;
+        if (req.session.user) {
+            isVolunteering = await isUserVolunteering(projectId, req.session.user.user_id);
+            isFavorite = await isProjectFavorite(projectId, req.session.user.user_id);
+        }
+
+        res.render('project', { title, project, categories, isVolunteering, isFavorite });
     } catch (error) {
         next(error);
     }
@@ -153,5 +187,102 @@ const processEditProjectForm = async (req, res, next) => {
     }
 }
 
+const handleVolunteer = async (req, res, next) => {
+    try {
+        const projectId = req.params.id;
+        const userId = req.session.user.user_id;
+        
+        await volunteerForProject(projectId, userId);
+        
+        req.flash('success', 'You have successfully volunteered for this project!');
+        res.redirect(`/project/${projectId}`);
+    } catch (error) {
+        console.error('Error volunteering for project:', error);
+        req.flash('error', 'An error occurred while signing up to volunteer.');
+        res.redirect(`/project/${req.params.id}`);
+    }
+};
+
+const handleRemoveVolunteer = async (req, res, next) => {
+    try {
+        const projectId = req.params.id;
+        const userId = req.session.user.user_id;
+        
+        await removeVolunteer(projectId, userId);
+        
+        req.flash('success', 'You have been removed as a volunteer from this project.');
+        
+        // If coming from dashboard, redirect back there, otherwise back to project details
+        const referer = req.get('Referer');
+        if (referer && referer.includes('/dashboard')) {
+            res.redirect('/dashboard');
+        } else {
+            res.redirect(`/project/${projectId}`);
+        }
+    } catch (error) {
+        console.error('Error removing volunteer status:', error);
+        req.flash('error', 'An error occurred while removing your volunteer status.');
+        res.redirect(`/project/${req.params.id}`);
+    }
+};
+
+const handleAddFavorite = async (req, res, next) => {
+    try {
+        const projectId = req.params.id;
+        const userId = req.session.user.user_id;
+        
+        await addFavorite(projectId, userId);
+        
+        req.flash('success', 'Project added to favorites!');
+        
+        // Redirect back to the previous page
+        const referer = req.get('Referer');
+        if (referer) {
+            res.redirect(referer);
+        } else {
+            res.redirect(`/project/${projectId}`);
+        }
+    } catch (error) {
+        console.error('Error adding favorite:', error);
+        req.flash('error', 'An error occurred while adding to favorites.');
+        res.redirect(`/project/${req.params.id}`);
+    }
+};
+
+const handleRemoveFavorite = async (req, res, next) => {
+    try {
+        const projectId = req.params.id;
+        const userId = req.session.user.user_id;
+        
+        await removeFavorite(projectId, userId);
+        
+        req.flash('success', 'Project removed from favorites.');
+        
+        // Redirect back to the previous page
+        const referer = req.get('Referer');
+        if (referer) {
+            res.redirect(referer);
+        } else {
+            res.redirect(`/project/${projectId}`);
+        }
+    } catch (error) {
+        console.error('Error removing favorite:', error);
+        req.flash('error', 'An error occurred while removing from favorites.');
+        res.redirect(`/project/${req.params.id}`);
+    }
+};
+
 // Export any controller functions
-export { showProjectsPage, showProjectDetailsPage, showNewProjectForm, processNewProjectForm, showEditProjectForm, processEditProjectForm, projectValidation };
+export { 
+    showProjectsPage, 
+    showProjectDetailsPage, 
+    showNewProjectForm, 
+    processNewProjectForm, 
+    showEditProjectForm, 
+    processEditProjectForm, 
+    projectValidation,
+    handleVolunteer,
+    handleRemoveVolunteer,
+    handleAddFavorite,
+    handleRemoveFavorite
+};

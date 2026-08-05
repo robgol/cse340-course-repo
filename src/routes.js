@@ -18,7 +18,11 @@ import {
     processNewProjectForm,
     showEditProjectForm,
     processEditProjectForm,
-    projectValidation
+    projectValidation,
+    handleVolunteer,
+    handleRemoveVolunteer,
+    handleAddFavorite,
+    handleRemoveFavorite
 } from './controllers/projects.js';
 import { 
     showCategoriesPage, 
@@ -41,7 +45,10 @@ import {
     requireLogin,
     showDashboard,
     requireRole,
-    showUsersPage
+    showUsersPage,
+    showEditUserForm,
+    processUpdateUser,
+    processDeleteUser
 } from './controllers/users.js';
 
 router.get('/', showHomePage);
@@ -65,6 +72,14 @@ router.get('/organization/:id', showOrganizationDetailsPage);
 
 // Route for project details page
 router.get('/project/:id', showProjectDetailsPage);
+
+// Volunteering routes
+router.get('/project/:id/volunteer', requireLogin, handleVolunteer);
+router.get('/project/:id/remove-volunteer', requireLogin, handleRemoveVolunteer);
+
+// Favorites routes
+router.get('/project/:id/favorite', requireLogin, handleAddFavorite);
+router.get('/project/:id/remove-favorite', requireLogin, handleRemoveFavorite);
 
 // Route for new project page
 router.get('/new-project', requireRole('admin'), showNewProjectForm);
@@ -101,5 +116,8 @@ router.get('/dashboard', requireLogin, showDashboard);
 
 // User management route (Admin only)
 router.get('/users', requireRole('admin'), showUsersPage);
+router.get('/edit-user/:id', requireRole('admin'), showEditUserForm);
+router.post('/edit-user/:id', requireRole('admin'), processUpdateUser);
+router.post('/delete-user/:id', requireRole('admin'), processDeleteUser);
 
 export default router;

@@ -2,7 +2,9 @@
 -- 1. CLEAN DATABASE (DROP EXISTING TABLES)
 -- =============================================================================
 -- CASCADE automatically drops dependent objects like foreign keys and junction tables
+DROP TABLE IF EXISTS favorites CASCADE;
 DROP TABLE IF EXISTS project_categories CASCADE;
+DROP TABLE IF EXISTS volunteers CASCADE;
 DROP TABLE IF EXISTS categories CASCADE;
 DROP TABLE IF EXISTS service_projects CASCADE;
 DROP TABLE IF EXISTS organizations CASCADE;
@@ -58,6 +60,38 @@ CREATE TABLE project_categories (
     CONSTRAINT fk_category
         FOREIGN KEY (category_id)
         REFERENCES categories(category_id)
+        ON DELETE CASCADE
+);
+
+-- Create volunteers table for many-to-many relationship between users and projects
+CREATE TABLE volunteers (
+    project_id INTEGER NOT NULL,
+    user_id INTEGER NOT NULL,
+    volunteered_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (project_id, user_id),
+    CONSTRAINT fk_project_vol
+        FOREIGN KEY (project_id)
+        REFERENCES service_projects(project_id)
+        ON DELETE CASCADE,
+    CONSTRAINT fk_user_vol
+        FOREIGN KEY (user_id)
+        REFERENCES users(user_id)
+        ON DELETE CASCADE
+);
+
+-- Create favorites table for tracking user's saved projects
+CREATE TABLE favorites (
+    project_id INTEGER NOT NULL,
+    user_id INTEGER NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (project_id, user_id),
+    CONSTRAINT fk_project_fav
+        FOREIGN KEY (project_id)
+        REFERENCES service_projects(project_id)
+        ON DELETE CASCADE,
+    CONSTRAINT fk_user_fav
+        FOREIGN KEY (user_id)
+        REFERENCES users(user_id)
         ON DELETE CASCADE
 );
 

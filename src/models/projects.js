@@ -121,5 +121,144 @@ const updateProject = async (projectId, title, description, location, date, orga
     return result.rows[0].project_id;
 };
 
+/**
+ * Add a user as a volunteer for a project
+ */
+const volunteerForProject = async (projectId, userId) => {
+    const query = `
+        INSERT INTO volunteers (project_id, user_id)
+        VALUES ($1, $2)
+        ON CONFLICT (project_id, user_id) DO NOTHING
+        RETURNING *;
+    `;
+    const result = await db.query(query, [projectId, userId]);
+    return result.rows[0];
+};
+
+/**
+ * Remove a user from volunteering for a project
+ */
+const removeVolunteer = async (projectId, userId) => {
+    const query = `
+        DELETE FROM volunteers
+        WHERE project_id = $1 AND user_id = $2
+        RETURNING *;
+    `;
+    const result = await db.query(query, [projectId, userId]);
+    return result.rows[0];
+};
+
+/**
+ * Get all projects a specific user has volunteered for
+ */
+const getVolunteeredProjects = async (userId) => {
+    const query = `
+        SELECT 
+            p.project_id,
+            p.title,
+            p.description,
+            p.location,
+            p.date,
+            p.image_url,
+            o.name AS organization_name
+        FROM service_projects p
+        JOIN organizations o ON p.organization_id = o.organization_id
+        JOIN volunteers v ON p.project_id = v.project_id
+        WHERE v.user_id = $1
+        ORDER BY p.date ASC;
+    `;
+    const result = await db.query(query, [userId]);
+    return result.rows;
+};
+
+/**
+ * Check if a user is already volunteering for a project
+ */
+const isUserVolunteering = async (projectId, userId) => {
+    const query = `
+        SELECT 1 FROM volunteers
+        WHERE project_id = $1 AND user_id = $2;
+    `;
+    const result = await db.query(query, [projectId, userId]);
+    return result.rows.length > 0;
+};
+
+/**
+ * Add a project to a user's favorites
+ */
+const addFavorite = async (projectId, userId) => {
+    const query = `
+        INSERT INTO favorites (project_id, user_id)
+        VALUES ($1, $2)
+        ON CONFLICT (project_id, user_id) DO NOTHING
+        RETURNING *;
+    `;
+    const result = await db.query(query, [projectId, userId]);
+    return result.rows[0];
+};
+
+/**
+ * Remove a project from a user's favorites
+ */
+const removeFavorite = async (projectId, userId) => {
+    const query = `
+        DELETE FROM favorites
+        WHERE project_id = $1 AND user_id = $2
+        RETURNING *;
+    `;
+    const result = await db.query(query, [projectId, userId]);
+    return result.rows[0];
+};
+
+/**
+ * Get all projects a specific user has favorited
+ */
+const getFavoriteProjects = async (userId) => {
+    const query = `
+        SELECT 
+            p.project_id,
+            p.title,
+            p.description,
+            p.location,
+            p.date,
+            p.image_url,
+            o.name AS organization_name
+        FROM service_projects p
+        JOIN organizations o ON p.organization_id = o.organization_id
+        JOIN favorites f ON p.project_id = f.project_id
+        WHERE f.user_id = $1
+        ORDER BY p.date ASC;
+    `;
+    const result = await db.query(query, [userId]);
+    return result.rows;
+};
+
+/**
+ * Check if a project is favorited by a user
+ */
+const isProjectFavorite = async (projectId, userId) => {
+    const query = `
+        SELECT 1 FROM favorites
+        WHERE project_id = $1 AND user_id = $2;
+    `;
+    const result = await db.query(query, [projectId, userId]);
+    return result.rows.length > 0;
+};
+
 // Export the model functions
-export { getAllProjects, getProjectsByOrganizationId, getUpcomingProjects, getProjectDetails, createProject, updateProject };
+export { 
+    getAllProjects, 
+    getProjectsByOrganizationId, 
+    getUpcomingProjects, 
+    getProjectDetails, 
+    createProject, 
+    updateProject,
+    volunteerForProject,
+    removeVolunteer,
+    getVolunteeredProjects,
+    isUserVolunteering,
+    addFavorite,
+    removeFavorite,
+    getFavoriteProjects,
+    isProjectFavorite
+};

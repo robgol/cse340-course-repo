@@ -73,4 +73,35 @@ const getAllUsers = async () => {
     return result.rows;
 };
 
-export { createUser, authenticateUser, getAllUsers };
+const getUserById = async (userId) => {
+    const query = `
+        SELECT u.user_id, u.name, u.email, u.role_id, r.role_name 
+        FROM users u
+        JOIN roles r ON u.role_id = r.role_id
+        WHERE u.user_id = $1
+    `;
+    const result = await db.query(query, [userId]);
+    return result.rows[0];
+};
+
+const updateUser = async (userId, name, email, roleId) => {
+    const query = `
+        UPDATE users 
+        SET name = $1, email = $2, role_id = $3 
+        WHERE user_id = $4
+    `;
+    await db.query(query, [name, email, roleId, userId]);
+};
+
+const deleteUser = async (userId) => {
+    const query = `DELETE FROM users WHERE user_id = $1`;
+    await db.query(query, [userId]);
+};
+
+const getAllRoles = async () => {
+    const query = `SELECT role_id, role_name FROM roles ORDER BY role_name ASC`;
+    const result = await db.query(query);
+    return result.rows;
+};
+
+export { createUser, authenticateUser, getAllUsers, getUserById, updateUser, deleteUser, getAllRoles };

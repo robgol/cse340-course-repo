@@ -50,13 +50,31 @@
                 <span class="hidden sm:inline">CSE 340</span>
             </a>
             <nav>
-                <ul class="flex gap-8 font-semibold">
+                <ul class="flex gap-8 font-semibold items-center">
                     <li><a href="/" class="hover:text-secondary transition-colors <%= currentPath === '/' ? 'text-secondary font-bold' : '' %>">Home</a></li>
                     <li><a href="/organizations" class="hover:text-secondary transition-colors <%= currentPath.startsWith('/organization') ? 'text-secondary font-bold' : '' %>">Organizations</a></li>
                     <li><a href="/projects" class="hover:text-secondary transition-colors <%= currentPath.startsWith('/project') ? 'text-secondary font-bold' : '' %>">Projects</a></li>
                     <li><a href="/categories" class="hover:text-secondary transition-colors <%= currentPath.startsWith('/categor') ? 'text-secondary font-bold' : '' %>">Categories</a></li>
                     <% if (isLoggedIn) { %>
-                        <li><a href="/logout" class="hover:text-secondary transition-colors">Logout</a></li>
+                        <li class="relative group">
+                            <button class="flex items-center gap-1 hover:text-secondary transition-colors cursor-pointer">
+                                My Account <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                            </button>
+                            <div class="absolute right-0 mt-2 w-48 bg-white border border-outline rounded-xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-[60] py-2 overflow-hidden">
+                                <a href="/dashboard" class="flex items-center gap-3 px-4 py-3 hover:bg-surface hover:text-secondary transition-colors text-sm <%= currentPath === '/dashboard' ? 'text-secondary font-bold bg-surface' : 'text-primary' %>">
+                                    <i data-lucide="layout-dashboard" class="w-4 h-4"></i> Dashboard
+                                </a>
+                                <% if (user && user.role_name === 'admin') { %>
+                                    <a href="/users" class="flex items-center gap-3 px-4 py-3 hover:bg-surface hover:text-secondary transition-colors text-sm <%= currentPath === '/users' ? 'text-secondary font-bold bg-surface' : 'text-primary' %>">
+                                        <i data-lucide="users" class="w-4 h-4"></i> User Management
+                                    </a>
+                                <% } %>
+                                <div class="border-t border-outline my-1"></div>
+                                <a href="/logout" class="flex items-center gap-3 px-4 py-3 hover:bg-rose-50 text-rose-500 transition-colors text-sm">
+                                    <i data-lucide="log-out" class="w-4 h-4"></i> Logout
+                                </a>
+                            </div>
+                        </li>
                     <% } else { %>
                         <li><a href="/register" class="hover:text-secondary transition-colors <%= currentPath === '/register' ? 'text-secondary font-bold' : '' %>">Register</a></li>
                         <li><a href="/login" class="hover:text-secondary transition-colors <%= currentPath === '/login' ? 'text-secondary font-bold' : '' %>">Login</a></li>

@@ -1,5 +1,14 @@
 import bcrypt from 'bcrypt';
-import { createUser, authenticateUser, getAllUsers } from '../models/users.js';
+import { 
+    createUser, 
+    authenticateUser, 
+    getAllUsers, 
+    getUserById, 
+    updateUser, 
+    deleteUser, 
+    getAllRoles 
+} from '../models/users.js';
+import { getVolunteeredProjects, getFavoriteProjects } from '../models/projects.js';
 
 const showUserRegistrationForm = (req, res) => {
     res.render('register', { title: 'Register' });
@@ -69,14 +78,25 @@ const requireLogin = (req, res, next) => {
     next();
 };
 
-const showDashboard = (req, res) => {
-    const user = req.session.user;
-    res.render('dashboard', { 
-        title: 'Dashboard',
-        name: user.name,
-        email: user.email,
-        role: user.role_name
-    });
+const showDashboard = async (req, res) => {
+    try {
+        const user = req.session.user;
+        const volunteeredProjects = await getVolunteeredProjects(user.user_id);
+        const favoriteProjects = await getFavoriteProjects(user.user_id);
+        
+        res.render('dashboard', { 
+            title: 'Dashboard',
+            name: user.name,
+            email: user.email,
+            role: user.role_name,
+            volunteeredProjects: volunteeredProjects,
+            favoriteProjects: favoriteProjects
+        });
+    } catch (error) {
+        console.error('Error loading dashboard:', error);
+        req.flash('error', 'An error occurred while loading your dashboard.');
+        res.redirect('/');
+    }
 };
 
 const showUsersPage = async (req, res) => {
@@ -90,6 +110,71 @@ const showUsersPage = async (req, res) => {
         console.error('Error fetching users:', error);
         req.flash('error', 'An error occurred while fetching users.');
         res.redirect('/dashboard');
+    }
+};
+
+const showEditUserForm = async (req, res) => {
+    try {
+        const userId = req.params.id;
+        const userToEdit = await getUserById(userId);
+        const roles = await getAllRoles();
+
+        if (!userToEdit) {
+            req.flash('error', 'User not found.');
+            return res.redirect('/users');
+        }
+
+        res.render('edit-user', {
+            title: 'Edit User',
+            userToEdit: userToEdit,
+            roles: roles
+        });
+    } catch (error) {
+        console.error('Error loading edit user form:', error);
+        req.flash('error', 'An error occurred while loading the edit form.');
+        res.redirect('/users');
+    }
+};
+
+const processUpdateUser = async (req, res) => {
+    try {
+        const userId = req.params.id;
+        const { name, email, role_id } = req.body;
+
+        await updateUser(userId, name, email, role_id);
+        
+        // If the user updated their own profile, update session
+        if (req.session.user.user_id == userId) {
+            const updatedUser = await getUserById(userId);
+            req.session.user = updatedUser;
+        }
+
+        req.flash('success', 'User updated successfully.');
+        res.redirect('/users');
+    } catch (error) {
+        console.error('Error updating user:', error);
+        req.flash('error', 'An error occurred while updating the user.');
+        res.redirect(`/edit-user/${req.params.id}`);
+    }
+};
+
+const processDeleteUser = async (req, res) => {
+    try {
+        const userId = req.params.id;
+
+        // Prevent admin from deleting themselves
+        if (req.session.user.user_id == userId) {
+            req.flash('error', 'You cannot delete your own account from the management page.');
+            return res.redirect('/users');
+        }
+
+        await deleteUser(userId);
+        req.flash('success', 'User deleted successfully.');
+        res.redirect('/users');
+    } catch (error) {
+        console.error('Error deleting user:', error);
+        req.flash('error', 'An error occurred while deleting the user.');
+        res.redirect('/users');
     }
 };
 
@@ -126,5 +211,8 @@ export {
     requireLogin,
     showDashboard,
     requireRole,
-    showUsersPage
+    showUsersPage,
+    showEditUserForm,
+    processUpdateUser,
+    processDeleteUser
 };
